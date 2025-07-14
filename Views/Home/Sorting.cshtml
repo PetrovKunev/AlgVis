@@ -1,0 +1,146 @@
+@{
+    ViewData["Title"] = "Сортиране";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Алгоритми за сортиране</h1>
+        <p class="text-xl text-gray-600">Изберете алгоритъм и масив за визуализация</p>
+    </div>
+    
+    <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="visualization-container">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Визуализация</h2>
+                    <div id="algorithm-info" class="algorithm-info hidden">
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Алгоритъм:</h3>
+                                <p id="algorithm-name" class="text-gray-700"></p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Описание:</h3>
+                                <p id="algorithm-description" class="text-gray-700"></p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center space-x-4">
+                            <span class="complexity-badge time">
+                                Време: <span id="time-complexity"></span>
+                            </span>
+                            <span class="complexity-badge space">
+                                Памет: <span id="space-complexity"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="array-visualization" class="flex justify-center items-end space-x-2 mb-6 min-h-32">
+                    <div class="text-gray-500">Въведете масив и изберете алгоритъм</div>
+                </div>
+                
+                <div id="step-description" class="text-center mb-4 hidden">
+                    <div class="algorithm-step">
+                        <span id="step-text" class="text-gray-700"></span>
+                    </div>
+                </div>
+                
+                <div id="progress-bar" class="w-full bg-gray-200 rounded-full h-2 mb-4 hidden">
+                    <div id="progress-fill" class="bg-primary-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="control-panel">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-gray-900">Контроли</h3>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Алгоритъм:</label>
+                        <select id="algorithm-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">Изберете алгоритъм</option>
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="selection">Selection Sort</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Масив (разделен със запетая):</label>
+                        <input type="text" id="array-input" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="64,34,25,12,22,11,90" value="64,34,25,12,22,11,90">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Скорост:</label>
+                        <input type="range" id="speed-slider" class="w-full" min="100" max="3000" value="1000">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>Бързо</span>
+                            <span>Бавно</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button id="start-btn" class="btn btn-primary flex-1">Започни</button>
+                        <button id="pause-btn" class="btn btn-secondary hidden">Пауза</button>
+                        <button id="reset-btn" class="btn btn-outline">Нулиране</button>
+                    </div>
+                    
+                    <div id="step-controls" class="flex space-x-2 hidden">
+                        <button id="prev-step" class="btn btn-outline flex-1">← Предишна</button>
+                        <button id="next-step" class="btn btn-outline flex-1">Следваща →</button>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                        <h4 class="font-medium text-blue-900 mb-2">Легенда:</h4>
+                        <div class="space-y-1 text-sm">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-warning-100 border-2 border-warning-500 rounded mr-2"></div>
+                                <span class="text-blue-800">Сравнение</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-accent-100 border-2 border-accent-500 rounded mr-2"></div>
+                                <span class="text-blue-800">Размяна</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-secondary-100 border-2 border-secondary-500 rounded mr-2"></div>
+                                <span class="text-blue-800">Pivot</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-success-100 border-2 border-success-500 rounded mr-2"></div>
+                                <span class="text-blue-800">Завършен</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-panel">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-gray-900">Готови примери</h3>
+                </div>
+                
+                <div class="space-y-2">
+                    <button class="w-full text-left p-2 rounded-lg hover:bg-gray-50 border border-gray-200" onclick="loadArray([64,34,25,12,22,11,90])">
+                        Случаен масив
+                    </button>
+                    <button class="w-full text-left p-2 rounded-lg hover:bg-gray-50 border border-gray-200" onclick="loadArray([1,2,3,4,5,6,7,8,9,10])">
+                        Сортиран масив
+                    </button>
+                    <button class="w-full text-left p-2 rounded-lg hover:bg-gray-50 border border-gray-200" onclick="loadArray([10,9,8,7,6,5,4,3,2,1])">
+                        Обратно сортиран
+                    </button>
+                    <button class="w-full text-left p-2 rounded-lg hover:bg-gray-50 border border-gray-200" onclick="loadArray([5,5,5,5,5,5,5,5,5,5])">
+                        Еднакви елементи
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/sorting.js"></script>
+}

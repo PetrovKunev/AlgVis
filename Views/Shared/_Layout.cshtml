@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Algorithm Visualizer</title>
+    <link rel="stylesheet" href="~/css/site.min.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔬</text></svg>">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="/" class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">A</span>
+                            </div>
+                            <span class="text-xl font-bold text-gray-900">Algorithm Visualizer</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">
+                            Начало
+                        </a>
+                        <a href="/Home/Sorting" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Sorting" ? "active" : "")">
+                            Сортиране
+                        </a>
+                        <a href="/Home/DataStructures" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "DataStructures" ? "active" : "")">
+                            Структури от данни
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+                <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                    Начало
+                </a>
+                <a href="/Home/Sorting" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                    Сортиране
+                </a>
+                <a href="/Home/DataStructures" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+                    Структури от данни
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-600">
+                    &copy; 2025 Algorithm Visualizer. Създадено с цел обучение по алгоритми и структури от данни.
+                </p>
+                <p class="text-gray-500 mt-2">
+                    Използва се модерен дизайн с TailwindCSS и C# ASP.NET Core
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

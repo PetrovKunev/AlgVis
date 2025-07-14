@@ -1,0 +1,26 @@
+{
+  "name": "algvis",
+  "version": "1.0.0",
+  "description": "Algorithm &amp; Data Structure Visualizer",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/site.min.css --watch",
+    "build-css-prod": "tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/site.min.css --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetrovKunev/AlgVis.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PetrovKunev/AlgVis/issues"
+  },
+  "homepage": "https://github.com/PetrovKunev/AlgVis#readme",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "tailwindcss": "^4.1.11"
+  }
+}

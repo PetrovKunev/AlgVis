@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "Структури от данни";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Структури от данни</h1>
+        <p class="text-xl text-gray-600">Изберете структура и операции за визуализация</p>
+    </div>
+    
+    <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="visualization-container">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Визуализация</h2>
+                    <div id="datastructure-info" class="algorithm-info hidden">
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Структура:</h3>
+                                <p id="datastructure-name" class="text-gray-700"></p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Описание:</h3>
+                                <p id="datastructure-description" class="text-gray-700"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="datastructure-visualization" class="mb-6 min-h-32">
+                    <div class="text-center text-gray-500">Изберете структура и добавете операции</div>
+                </div>
+                
+                <div id="operation-description" class="text-center mb-4 hidden">
+                    <div class="algorithm-step">
+                        <span id="operation-text" class="text-gray-700"></span>
+                    </div>
+                </div>
+                
+                <div id="operation-message" class="text-center mb-4 hidden">
+                    <div class="p-3 rounded-lg">
+                        <span id="message-text" class="text-sm"></span>
+                    </div>
+                </div>
+                
+                <div id="ds-progress-bar" class="w-full bg-gray-200 rounded-full h-2 mb-4 hidden">
+                    <div id="ds-progress-fill" class="bg-primary-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="control-panel">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-gray-900">Контроли</h3>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Структура:</label>
+                        <select id="datastructure-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="">Изберете структура</option>
+                            <option value="array">Масив</option>
+                            <option value="stack">Стек</option>
+                            <option value="queue">Опашка</option>
+                        </select>
+                    </div>
+                    
+                    <div id="operation-controls" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Операции:</label>
+                        <div class="space-y-2">
+                            <textarea id="operations-input" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" rows="6" placeholder="Въведете операции (по една на ред)"></textarea>
+                            <div class="text-xs text-gray-500">
+                                <div id="operation-help" class="hidden">
+                                    <div id="array-help" class="hidden">
+                                        <p class="font-medium mb-1">Операции за масив:</p>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>set 0 5 - задава стойност 5 на индекс 0</li>
+                                            <li>get 0 - чете стойност от индекс 0</li>
+                                            <li>search 5 - търси стойност 5</li>
+                                        </ul>
+                                    </div>
+                                    <div id="stack-help" class="hidden">
+                                        <p class="font-medium mb-1">Операции за стек:</p>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>push 5 - добавя стойност 5</li>
+                                            <li>pop - премахва елемент от върха</li>
+                                            <li>peek - гледа върха без да премахва</li>
+                                            <li>isEmpty - проверява дали е празен</li>
+                                        </ul>
+                                    </div>
+                                    <div id="queue-help" class="hidden">
+                                        <p class="font-medium mb-1">Операции за опашка:</p>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>enqueue 5 - добавя стойност 5</li>
+                                            <li>dequeue - премахва елемент от началото</li>
+                                            <li>front - гледа първия елемент</li>
+                                            <li>isEmpty - проверява дали е празна</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Скорост:</label>
+                        <input type="range" id="ds-speed-slider" class="w-full" min="100" max="3000" value="1000">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>Бързо</span>
+                            <span>Бавно</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button id="ds-start-btn" class="btn btn-primary flex-1">Започни</button>
+                        <button id="ds-pause-btn" class="btn btn-secondary hidden">Пауза</button>
+                        <button id="ds-reset-btn" class="btn btn-outline">Нулиране</button>
+                    </div>
+                    
+                    <div id="ds-step-controls" class="flex space-x-2 hidden">
+                        <button id="ds-prev-step" class="btn btn-outline flex-1">← Предишна</button>
+                        <button id="ds-next-step" class="btn btn-outline flex-1">Следваща →</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-panel">
+                <div class="card-header">
+                    <h3 class="text-lg font-semibold text-gray-900">Готови примери</h3>
+                </div>
+                
+                <div id="examples-container" class="space-y-2">
+                    <div class="text-gray-500 text-sm">Изберете структура за да видите примери</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/datastructures.js"></script>
+}

@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Начало";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center">
+        <div class="flex justify-center mb-8">
+            <div class="w-24 h-24 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center animate-bounce-in">
+                <span class="text-white text-4xl font-bold">🔬</span>
+            </div>
+        </div>
+        
+        <h1 class="text-4xl font-bold text-gray-900 mb-4 animate-fade-in">
+            Добре дошли в Algorithm Visualizer
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto animate-slide-up">
+            Интерактивно приложение за визуализация на алгоритми и структури от данни. 
+            Учете по-лесно чрез стъпка по стъпка демонстрации с модерен дизайн.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <a href="/Home/Sorting" class="btn btn-primary text-lg px-8 py-3 animate-slide-up">
+                Започни със сортиране
+            </a>
+            <a href="/Home/DataStructures" class="btn btn-outline text-lg px-8 py-3 animate-slide-up">
+                Структури от данни
+            </a>
+        </div>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div class="card text-center animate-fade-in">
+            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Алгоритми за сортиране</h3>
+            <p class="text-gray-600">Bubble Sort, Quick Sort, Selection Sort и много други с детайлни обяснения</p>
+        </div>
+        
+        <div class="card text-center animate-fade-in">
+            <div class="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-secondary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Структури от данни</h3>
+            <p class="text-gray-600">Масиви, стекове, опашки - визуализирани по интуитивен начин</p>
+        </div>
+        
+        <div class="card text-center animate-fade-in">
+            <div class="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Стъпка по стъпка</h3>
+            <p class="text-gray-600">Контролирайте скоростта и следете всяка стъпка от алгоритъма</p>
+        </div>
+    </div>
+    
+    <div class="algorithm-info text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Защо Algorithm Visualizer?</h2>
+        <div class="grid md:grid-cols-2 gap-8 text-left">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">✨ Модерен дизайн</h3>
+                <p class="text-gray-600">Използва TailwindCSS и Inter шрифт за оптимално потребителско изживяване</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">🎯 Учебни цели</h3>
+                <p class="text-gray-600">Специално създаден за ученици изучаващи информатика и алгоритми</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">🚀 Бързо и лесно</h3>
+                <p class="text-gray-600">Интуитивен интерфейс без нужда от регистрация или сложни настройки</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">📱 Responsive</h3>
+                <p class="text-gray-600">Работи отлично на всички устройства - компютър, таблет, телефон</p>
+            </div>
+        </div>
+    </div>
+</div>
