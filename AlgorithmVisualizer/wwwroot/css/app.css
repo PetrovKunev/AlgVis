@@ -1,0 +1,53 @@
+/* TailwindCSS Base */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom styles for algorithm visualization */
+.array-element {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.125rem;
+  transition: all 0.2s;
+}
+
+.array-element-active {
+  border-color: #3b82f6;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.array-element-comparing {
+  border-color: #eab308;
+  background-color: #fef3c7;
+  color: #a16207;
+}
+
+.array-element-sorted {
+  border-color: #22c55e;
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.control-button {
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.control-button:hover {
+  background-color: #2563eb;
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+} 

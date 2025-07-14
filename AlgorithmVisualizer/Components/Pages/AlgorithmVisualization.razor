@@ -1,0 +1,240 @@
+@page "/visualize/{AlgorithmId:int}"
+@using AlgorithmVisualizer.Models
+@using AlgorithmVisualizer.Services
+@using System.Text.Json
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>@(algorithm?.Name ?? "Algorithm") Visualization</PageTitle>
+
+<div class="container mx-auto px-4 py-8">
+    @if (algorithm == null)
+    {
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p>Loading algorithm...</p>
+        </div>
+    }
+    else
+    {
+        <div class="mb-6">
+            <button @onclick='() => Navigation.NavigateTo("/")' 
+                    class="control-button mb-4">
+                ← Back to Algorithms
+            </button>
+            
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">@algorithm.Name</h1>
+            <p class="text-gray-600 mb-4">@algorithm.Description</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Input Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Input</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Array Input:</label>
+                    <input @bind="inputArray" 
+                           @bind:event="oninput"
+                           placeholder="Enter numbers separated by commas (e.g., 64,34,25,12,22,11,90)"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Or choose an example:</label>
+                    <div class="space-y-2">
+                        @foreach (var example in algorithm.ExampleInputs)
+                        {
+                            <button @onclick="() => inputArray = example"
+                                    class="block w-full text-left px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors">
+                                @example
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <button @onclick="GenerateTrace" 
+                        @onclick:preventDefault="true"
+                        disabled="@(string.IsNullOrWhiteSpace(inputArray))"
+                        class="control-button w-full">
+                    Generate Trace
+                </button>
+            </div>
+
+            <!-- Visualization Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Visualization</h2>
+                
+                @if (trace == null)
+                {
+                    <div class="text-center text-gray-500 py-8">
+                        <p>Enter input and click "Generate Trace" to start visualization</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-4">
+                        <ArrayVisualizer Array="@currentArray" 
+                                        ActiveIndices="@activeIndices" 
+                                        ComparingIndices="@comparingIndices" 
+                                        SortedIndices="@sortedIndices" />
+                    </div>
+
+                    <div class="mb-4">
+                        <PlaybackControls CurrentStep="@currentStep" 
+                                         TotalSteps="@trace.Count" 
+                                         IsPlaying="@isPlaying"
+                                         OnStepChanged="@OnStepChanged"
+                                         OnPlayPause="@TogglePlayPause" />
+                    </div>
+
+                    @if (currentTraceStep != null)
+                    {
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold mb-2">Step @currentTraceStep.StepNumber</h3>
+                            <p class="text-gray-700">@currentTraceStep.Description</p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int AlgorithmId { get; set; }
+
+    private Algorithm? algorithm;
+    private List<TraceStep>? trace;
+    private TraceStep? currentTraceStep;
+    private int currentStep = 0;
+    private bool isPlaying = false;
+    private string inputArray = "";
+    
+    private int[] currentArray = Array.Empty<int>();
+    private List<int> activeIndices = new();
+    private List<int> comparingIndices = new();
+    private List<int> sortedIndices = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            algorithm = await Http.GetFromJsonAsync<Algorithm>($"api/algorithms/{AlgorithmId}");
+        }
+        catch
+        {
+            algorithm = StaticAlgorithmData.GetAlgorithmById(AlgorithmId);
+        }
+
+        if (algorithm == null)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private async Task GenerateTrace()
+    {
+        if (string.IsNullOrWhiteSpace(inputArray)) return;
+
+        try
+        {
+            var request = new { Input = inputArray };
+            trace = await Http.PostAsJsonAsync($"api/algorithms/{AlgorithmId}/trace", request)
+                             .Result.Content.ReadFromJsonAsync<List<TraceStep>>();
+            
+            if (trace != null && trace.Count > 0)
+            {
+                currentStep = 0;
+                UpdateVisualization();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+            Console.WriteLine($"Error generating trace: {ex.Message}");
+        }
+    }
+
+    private void UpdateVisualization()
+    {
+        if (trace == null || currentStep >= trace.Count) return;
+
+        currentTraceStep = trace[currentStep];
+        
+        // Update array and indices based on current step
+        if (currentTraceStep.State is JsonElement element)
+        {
+            if (element.TryGetProperty("array", out var arrayElement))
+            {
+                currentArray = arrayElement.EnumerateArray().Select(x => x.GetInt32()).ToArray();
+            }
+
+            activeIndices.Clear();
+            comparingIndices.Clear();
+            sortedIndices.Clear();
+
+            // Extract indices based on action
+            switch (currentTraceStep.Action)
+            {
+                case "compare":
+                    if (element.TryGetProperty("leftIndex", out var leftIndex) && 
+                        element.TryGetProperty("rightIndex", out var rightIndex))
+                    {
+                        comparingIndices.Add(leftIndex.GetInt32());
+                        comparingIndices.Add(rightIndex.GetInt32());
+                    }
+                    break;
+                case "swap":
+                    if (element.TryGetProperty("leftIndex", out var left) && 
+                        element.TryGetProperty("rightIndex", out var right))
+                    {
+                        activeIndices.Add(left.GetInt32());
+                        activeIndices.Add(right.GetInt32());
+                    }
+                    break;
+                case "pass_complete":
+                    if (element.TryGetProperty("sortedCount", out var sortedCount))
+                    {
+                        var count = sortedCount.GetInt32();
+                        for (int i = currentArray.Length - count; i < currentArray.Length; i++)
+                        {
+                            sortedIndices.Add(i);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void OnStepChanged(int step)
+    {
+        currentStep = step;
+        UpdateVisualization();
+    }
+
+    private void TogglePlayPause()
+    {
+        isPlaying = !isPlaying;
+        if (isPlaying)
+        {
+            _ = StartAutoPlayAsync();
+        }
+    }
+
+    private async Task StartAutoPlayAsync()
+    {
+        while (isPlaying && currentStep < (trace?.Count ?? 0) - 1)
+        {
+            await Task.Delay(1000); // 1 second delay
+            if (isPlaying)
+            {
+                currentStep++;
+                UpdateVisualization();
+                StateHasChanged();
+            }
+        }
+        isPlaying = false;
+    }
+} 

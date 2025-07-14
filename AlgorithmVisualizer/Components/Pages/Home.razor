@@ -1,0 +1,64 @@
+﻿@page "/"
+@using AlgorithmVisualizer.Models
+@using AlgorithmVisualizer.Services
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Algorithm Visualizer</PageTitle>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Algorithm Visualizer</h1>
+        <p class="text-xl text-gray-600">Interactive visualization of classic algorithms with step-by-step animations</p>
+    </div>
+
+    @if (algorithms == null)
+    {
+        <div class="flex justify-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var algorithm in algorithms)
+            {
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">@algorithm.Name</h3>
+                        <span class="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full">
+                            @algorithm.Category
+                        </span>
+                    </div>
+                    <p class="text-gray-600 mb-4">@algorithm.Description</p>
+                    <button @onclick="() => NavigateToAlgorithm(algorithm.Id)" 
+                            class="control-button w-full">
+                        Visualize Algorithm
+                    </button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Algorithm>? algorithms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            algorithms = await Http.GetFromJsonAsync<List<Algorithm>>("api/algorithms");
+        }
+        catch
+        {
+            // Fallback to static data if API fails
+            algorithms = StaticAlgorithmData.GetAlgorithms();
+        }
+    }
+
+    private void NavigateToAlgorithm(int algorithmId)
+    {
+        Navigation.NavigateTo($"/visualize/{algorithmId}");
+    }
+}

@@ -1,0 +1,66 @@
+<div class="playback-controls">
+    <div class="flex items-center justify-center gap-4 mb-4">
+        <button @onclick="() => OnStepChanged(0)" 
+                disabled="@(CurrentStep == 0)"
+                class="control-button">
+            ⏮️ First
+        </button>
+        
+        <button @onclick="() => OnStepChanged(CurrentStep - 1)" 
+                disabled="@(CurrentStep == 0)"
+                class="control-button">
+            ⏪ Previous
+        </button>
+        
+        <button @onclick="OnPlayPause" 
+                class="control-button">
+            @if (IsPlaying)
+            {
+                <span>⏸️ Pause</span>
+            }
+            else
+            {
+                <span>▶️ Play</span>
+            }
+        </button>
+        
+        <button @onclick="() => OnStepChanged(CurrentStep + 1)" 
+                disabled="@(CurrentStep >= TotalSteps - 1)"
+                class="control-button">
+            ⏩ Next
+        </button>
+        
+        <button @onclick="() => OnStepChanged(TotalSteps - 1)" 
+                disabled="@(CurrentStep >= TotalSteps - 1)"
+                class="control-button">
+            ⏭️ Last
+        </button>
+    </div>
+    
+    <div class="flex items-center gap-4">
+        <span class="text-sm text-gray-600">Step @(CurrentStep + 1) of @TotalSteps</span>
+        <input type="range" 
+               min="0" 
+               max="@(TotalSteps - 1)" 
+               value="@CurrentStep"
+               @onchange="@(e => OnStepChanged(int.Parse(e.Value?.ToString() ?? "0")))"
+               class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int CurrentStep { get; set; }
+
+    [Parameter]
+    public int TotalSteps { get; set; }
+
+    [Parameter]
+    public bool IsPlaying { get; set; }
+
+    [Parameter]
+    public Action<int> OnStepChanged { get; set; } = _ => { };
+
+    [Parameter]
+    public Action OnPlayPause { get; set; } = () => { };
+} 
